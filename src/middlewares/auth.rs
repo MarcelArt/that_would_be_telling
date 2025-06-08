@@ -1,4 +1,4 @@
-use actix_web::{body::{EitherBody, MessageBody}, dev::{ServiceRequest, ServiceResponse}, http::header::{self}, middleware::Next, Error, HttpResponse};
+use actix_web::{body::{EitherBody, MessageBody}, dev::{ServiceRequest, ServiceResponse}, http::header::{self}, middleware::Next, Error, HttpMessage, HttpResponse};
 use jsonwebtoken::{decode, DecodingKey, Validation};
 use dotenv_codegen::dotenv;
 use crate::models::{claims::AccessTokenClaims, response::Response};
@@ -49,7 +49,9 @@ where
         return Ok(ServiceResponse::new(req, res));
     }
 
-    println!("Decoded token: {:#?}", decoded_token);
+    let claims = decoded_token.unwrap().claims;
+
+    req.extensions_mut().insert(claims);
 
     let res = next.call(req).await?.map_into_left_body();
 
