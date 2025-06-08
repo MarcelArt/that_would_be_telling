@@ -3279,24 +3279,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4e27ee8bb91ca0adcf0ecb116293afa12d393f9c2b9b9cd54d33e8078fe19839"
 
 [[package]]
-name = "rsbac"
-version = "0.1.0"
-dependencies = [
- "actix-service",
- "actix-web",
- "chrono",
- "crud_derive",
- "dotenv",
- "dotenv_codegen",
- "env_logger",
- "futures-util",
- "jsonwebtoken",
- "serde",
- "surrealdb",
- "thiserror 2.0.12",
-]
-
-[[package]]
 name = "rstar"
 version = "0.12.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3988,6 +3970,24 @@ dependencies = [
  "dirs-next",
  "rustversion",
  "winapi",
+]
+
+[[package]]
+name = "that_would_be_telling"
+version = "0.1.0"
+dependencies = [
+ "actix-service",
+ "actix-web",
+ "chrono",
+ "crud_derive",
+ "dotenv",
+ "dotenv_codegen",
+ "env_logger",
+ "futures-util",
+ "jsonwebtoken",
+ "serde",
+ "surrealdb",
+ "thiserror 2.0.12",
 ]
 
 [[package]]

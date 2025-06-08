@@ -7,15 +7,15 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug executable 'rsbac'",
+            "name": "Debug executable 'that_would_be_telling'",
             "cargo": {
                 "args": [
                     "build",
-                    "--bin=rsbac",
-                    "--package=rsbac"
+                    "--bin=that_would_be_telling",
+                    "--package=that_would_be_telling"
                 ],
                 "filter": {
-                    "name": "rsbac",
+                    "name": "that_would_be_telling",
                     "kind": "bin"
                 }
             },
@@ -25,16 +25,16 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug unit tests in executable 'rsbac'",
+            "name": "Debug unit tests in executable 'that_would_be_telling'",
             "cargo": {
                 "args": [
                     "test",
                     "--no-run",
-                    "--bin=rsbac",
-                    "--package=rsbac"
+                    "--bin=that_would_be_telling",
+                    "--package=that_would_be_telling"
                 ],
                 "filter": {
-                    "name": "rsbac",
+                    "name": "that_would_be_telling",
                     "kind": "bin"
                 }
             },
