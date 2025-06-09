@@ -5,6 +5,8 @@ use dotenv_codegen::dotenv;
 use routes::{permission, user, role};
 use env_logger::Env;
 
+use crate::routes::project;
+
 mod handlers;
 mod models;
 mod routes;
@@ -34,6 +36,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .service(permission::setup_routes())
             .service(user::setup_routes())
             .service(role::setup_routes())
+            .service(project::setup_routes())
     })
     .bind(("0.0.0.0", port))?
     .run()
