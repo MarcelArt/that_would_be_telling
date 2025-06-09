@@ -43,9 +43,9 @@ impl ICreate<Project, ProjectDto> for Repo {
 impl IRead<Project> for Repo {
     async fn read(&self) -> Result<Vec<Project>, crate::error::Error> {
         let query = "
-            SELECT 
+            select 
                 *, 
-                permissions.{id, value, description} as permissions_detail
+                creator.* as creator_detail
             from projects
         ";
 
@@ -60,9 +60,9 @@ impl IGetById<Project> for Repo {
     async fn get_by_id(&self, id: String) -> Result<Option<Project>, crate::error::Error> {
         let id = RecordId::from((PROJECTS, id));
         let query = "
-            SELECT 
+            select 
                 *, 
-                permissions.{id, value, description} as permissions_detail
+                creator.* as creator_detail
             from $id
         ";
 
