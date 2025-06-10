@@ -5,7 +5,7 @@ use dotenv_codegen::dotenv;
 use routes::{permission, user, role};
 use env_logger::Env;
 
-use crate::routes::project;
+use crate::routes::{environment, project};
 
 mod handlers;
 mod models;
@@ -28,7 +28,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let db = surreal::connect().await?;
     let repos = repos::Combined::new(db);
 
-    println!("Starting server at http://localhost:8080");
+    println!("Starting server at http://localhost:{}", port);
     HttpServer::new(move || {
         App::new()
             .app_data(Data::new(repos.clone()))
@@ -37,6 +37,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .service(user::setup_routes())
             .service(role::setup_routes())
             .service(project::setup_routes())
+            .service(environment::setup_routes())
     })
     .bind(("0.0.0.0", port))?
     .run()
