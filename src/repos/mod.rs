@@ -8,6 +8,7 @@ pub mod user;
 pub mod role;
 pub mod project;
 pub mod environment;
+pub mod variable;
 
 #[derive(Clone)]
 pub struct Combined {
@@ -16,6 +17,7 @@ pub struct Combined {
     pub role: role::Repo,
     pub project: project::Repo,
     pub environment: environment::Repo,
+    pub variable: variable::Repo,
 }
 
 impl Combined {
@@ -28,6 +30,7 @@ impl Combined {
             role: role::Repo::new(Arc::clone(&db)),
             project: project::Repo::new(Arc::clone(&db)),
             environment: environment::Repo::new(Arc::clone(&db)),
+            variable: variable::Repo::new(Arc::clone(&db)),
         }
     }
 }
