@@ -1,8 +1,7 @@
 use actix_web::{delete, get, post, put, web::{self, Json}, HttpResponse};
-use dotenv_codegen::dotenv;
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
 
-use crate::{models::{claims::{AccessTokenClaims, RefreshTokenClaims}, response::Response, user::{LoginInput, LoginResponse, RefreshInput, User, UserDto}}, repos::{self, base::{ICreate, IDelete, IGetById, IRead, IUpdate}}, utils::time::{self}};
+use crate::{models::{claims::{AccessTokenClaims, RefreshTokenClaims}, response::Response, user::{LoginInput, LoginResponse, RefreshInput, User, UserDto}}, repos::{self, base::{ICreate, IDelete, IGetById, IRead, IUpdate}}, utils::{env::get_env, time::{self}}};
 
 #[post("/")]
 pub async fn create(repo: web::Data<repos::Combined>, user: Json<UserDto>) -> HttpResponse {    
@@ -102,7 +101,7 @@ pub async fn login(repo: web::Data<repos::Combined>, user: Json<LoginInput>) -> 
         },
         Ok(Some(u)) => {
             let exp = (chrono::Utc::now().timestamp() + 5 * time::MINUTE) as usize; // 5 minutes expiration
-            let secret = dotenv!("JWT_SECRET");
+            let secret = get_env("JWT_SECRET").unwrap_or_default();
             let access_token_claims = AccessTokenClaims {
                 username: u.username.clone(),
                 user_id: u.id.to_string(),
@@ -134,7 +133,7 @@ pub async fn login(repo: web::Data<repos::Combined>, user: Json<LoginInput>) -> 
 
 #[post("/refresh")]
 pub async fn generate_new_token_pair(repo: web::Data<repos::Combined>, input: Json<RefreshInput>) -> HttpResponse {
-    let secret = dotenv!("JWT_SECRET");
+    let secret = get_env("JWT_SECRET").unwrap_or_default();
     let decode_res = decode::<RefreshTokenClaims>(&input.refresh_token, &DecodingKey::from_secret(secret.as_ref()), &Validation::default());
 
     match decode_res {
@@ -154,7 +153,7 @@ pub async fn generate_new_token_pair(repo: web::Data<repos::Combined>, input: Js
                 },
                 Ok(Some(u)) => {
                     let exp = (chrono::Utc::now().timestamp() + 5 * time::MINUTE) as usize; // 5 minutes expiration
-                    let secret = dotenv!("JWT_SECRET");
+                    let secret = get_env("JWT_SECRET").unwrap_or_default();
                     let access_token_claims = AccessTokenClaims {
                         username: u.username.clone(),
                         user_id: u.id.to_string(),

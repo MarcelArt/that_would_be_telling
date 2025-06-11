@@ -1,11 +1,11 @@
+
 use actix_web::{middleware::Logger, web::Data, App, HttpServer};
 use db::surreal::{self};
 use dotenv::dotenv;
-use dotenv_codegen::dotenv;
 use routes::{permission, user, role};
 use env_logger::Env;
 
-use crate::routes::{environment, project, variable};
+use crate::{routes::{environment, project, variable}, utils::{args, env::get_env}};
 
 mod handlers;
 mod models;
@@ -18,11 +18,16 @@ mod middlewares;
 
 #[actix_web::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    dotenv().ok();
+    let server_env = args::get_var(1).unwrap_or_default();
+    if server_env != "prod" {
+        println!("Running in development mode");
+        println!("Reading environment variables from .env file");
+        dotenv().ok();
+    }
     
     env_logger::init_from_env(Env::default().default_filter_or("info"));
     
-    let port = dotenv!("PORT");
+    let port = get_env("PORT").unwrap_or_default();
     let port = port.parse::<u16>().expect("PORT must be a number");
 
     let db = surreal::connect().await?;

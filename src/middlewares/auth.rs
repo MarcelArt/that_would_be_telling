@@ -1,13 +1,12 @@
 use actix_web::{body::{EitherBody, MessageBody}, dev::{ServiceRequest, ServiceResponse}, http::header::{self}, middleware::Next, Error, HttpMessage, HttpResponse};
 use jsonwebtoken::{decode, DecodingKey, Validation};
-use dotenv_codegen::dotenv;
-use crate::models::{claims::AccessTokenClaims, response::Response};
+use crate::{models::{claims::AccessTokenClaims, response::Response}, utils::env::get_env};
 
 pub async fn protect<B>(req: ServiceRequest, next: Next<B>) -> Result<ServiceResponse<EitherBody<B>>, Error>
 where
     B: MessageBody + 'static,
 {
-    let secret = dotenv!("JWT_SECRET");
+    let secret = get_env("JWT_SECRET").unwrap_or_default();
     let token = req.headers().get(header::AUTHORIZATION);
     if token.is_none() {
         let (req, _) = req.into_parts();

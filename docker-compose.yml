@@ -1,0 +1,37 @@
+version: '3.8'
+
+volumes:
+  surreal_data:
+
+services:
+  surrealdb:
+    container_name: surrealdb
+    user: root
+    env_file:
+      - .env
+    entrypoint: 
+      - /surreal 
+      - start 
+      - --user
+      - $DB_USER
+      - --pass
+      - $DB_PASS
+      - --log
+      - debug
+      - rocksdb:/mydata/surreal.db
+    image: surrealdb/surrealdb:latest
+    volumes:
+      - surreal_data:/mydata
+    ports:
+      - 8000:8000
+
+  backend:
+    container_name: backend
+    env_file:
+      - .env
+    depends_on:
+      - surrealdb
+    image: marcelaritonang/that-would-be-telling:latest
+    ports:
+      - 8080:8080
+    
