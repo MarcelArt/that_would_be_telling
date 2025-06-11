@@ -1,5 +1,5 @@
 
-use actix_web::{middleware::Logger, web::Data, App, HttpServer};
+use actix_web::{middleware::Logger, web::{self, Data}, App, HttpServer};
 use db::surreal::{self};
 use dotenv::dotenv;
 use routes::{permission, user, role};
@@ -38,12 +38,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         App::new()
             .app_data(Data::new(repos.clone()))
             .wrap(Logger::default())
-            .service(permission::setup_routes())
-            .service(user::setup_routes())
-            .service(role::setup_routes())
-            .service(project::setup_routes())
-            .service(environment::setup_routes())
-            .service(variable::setup_routes())
+            .service(
+                web::scope("/api")
+                    .service(permission::setup_routes())
+                    .service(user::setup_routes())
+                    .service(role::setup_routes())
+                    .service(project::setup_routes())
+                    .service(environment::setup_routes())
+                    .service(variable::setup_routes())
+            )
+            
     })
     .bind(("0.0.0.0", port))?
     .run()
