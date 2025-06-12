@@ -22,14 +22,14 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
 				is_remember: isRemember,
 				password,
 				username,
-			})
+			});
 		},
 		onSuccess: (data) => {
-			localStorage.setItem("accessToken", data.data.access_token);
-			localStorage.setItem("refreshToken", data.data.refresh_token);
+			localStorage.setItem('accessToken', data.data.access_token);
+			localStorage.setItem('refreshToken', data.data.refresh_token);
 			navigate({ to: '/' });
 		},
-	})
+	});
 
 	return (
 		<div className={cn('flex flex-col gap-6', className)} {...props}>
@@ -39,32 +39,37 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
 					<CardDescription>Enter your username below to login to your account</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<form>
-						<div className="flex flex-col gap-6">
-							<div className="grid gap-3">
-								<Label htmlFor="username">Username</Label>
-								<Input id="username" type="text" placeholder="admin" required value={username} onChange={(e) => setUsername(e.target.value)}/>
-							</div>
-							<div className="grid gap-3">
-								<div className="flex items-center">
-									<Label htmlFor="password">Password</Label>
-									<a href="#" className="ml-auto inline-block text-sm underline-offset-4 hover:underline">
-										Forgot your password?
-									</a>
-								</div>
-								<Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)}/>
-							</div>
-							<div className="flex items-center gap-3">
-								<Checkbox id="is_remember_me" checked={isRemember} onCheckedChange={(e) => setIsRemember(e.valueOf() as boolean)}/>
-								<Label htmlFor="is_remember_me">Remember Me</Label>
-							</div>
-							<div className="flex flex-col gap-3">
-								<Button type="submit" className="w-full" onClick={() => mutate()}>
-									Login
-								</Button>
-							</div>
+					<div className="flex flex-col gap-6">
+						<div className="grid gap-3">
+							<Label htmlFor="username">Username</Label>
+							<Input
+								id="username"
+								type="text"
+								placeholder="admin"
+								required
+								value={username}
+								onChange={(e) => setUsername(e.target.value)}
+							/>
 						</div>
-					</form>
+						<div className="grid gap-3">
+							<div className="flex items-center">
+								<Label htmlFor="password">Password</Label>
+								<a href="#" className="ml-auto inline-block text-sm underline-offset-4 hover:underline">
+									Forgot your password?
+								</a>
+							</div>
+							<Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+						</div>
+						<div className="flex items-center gap-3">
+							<Checkbox id="is_remember_me" checked={isRemember} onCheckedChange={(e) => setIsRemember(e.valueOf() as boolean)} />
+							<Label htmlFor="is_remember_me">Remember Me</Label>
+						</div>
+						<div className="flex flex-col gap-3">
+							<Button className="w-full" onClick={() => mutate()}>
+								Login
+							</Button>
+						</div>
+					</div>
 				</CardContent>
 			</Card>
 		</div>

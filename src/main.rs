@@ -37,8 +37,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Starting server at http://localhost:{}", port);
     HttpServer::new(move || {
         let cors = Cors::default()
-            .allowed_origin("http://localhost:3000")
-            .allowed_origin("http://127.0.0.1:3000")
+            .allowed_origin_fn(|origin, _req_head| {
+                origin.as_bytes().starts_with(b"http://localhost")
+                    || origin.as_bytes().starts_with(b"http://127.0.0.1")
+                    || origin.as_bytes().starts_with(b"http://192.168.") // local network IPs
+                    || origin.as_bytes().starts_with(b"http://host.docker.internal")
+            })
             .allowed_methods(vec!["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"])
             .allowed_headers(vec![
                 http::header::AUTHORIZATION,
