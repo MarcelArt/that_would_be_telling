@@ -37,11 +37,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Starting server at http://localhost:{}", port);
     HttpServer::new(move || {
         let cors = Cors::default()
-            .send_wildcard()
-            .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
-            .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
-            .allowed_header(http::header::CONTENT_TYPE)
+            .allowed_origin("http://localhost:3000")
+            .allowed_origin("http://127.0.0.1:3000")
+            .allowed_methods(vec!["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"])
+            .allowed_headers(vec![
+                http::header::AUTHORIZATION,
+                http::header::ACCEPT,
+                http::header::CONTENT_TYPE,
+                http::header::ORIGIN,
+                http::header::USER_AGENT,
+                http::header::REFERER,
+            ])
+            .expose_headers(vec![http::header::CONTENT_LENGTH])
+            .supports_credentials()
             .max_age(3600);
+
 
 
         App::new()
