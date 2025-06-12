@@ -1,5 +1,6 @@
 
-use actix_web::{middleware::Logger, web::{self, Data}, App, HttpServer};
+use actix_cors::Cors;
+use actix_web::{http, middleware::Logger, web::{self, Data}, App, HttpServer};
 use db::surreal::{self};
 use dotenv::dotenv;
 use routes::{permission, user, role};
@@ -35,9 +36,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("Starting server at http://localhost:{}", port);
     HttpServer::new(move || {
+        let cors = Cors::default()
+            .send_wildcard()
+            .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
+            .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
+            .allowed_header(http::header::CONTENT_TYPE)
+            .max_age(3600);
+
+
         App::new()
             .app_data(Data::new(repos.clone()))
             .wrap(Logger::default())
+            .wrap(cors)
             .service(
                 web::scope("/api")
                     .service(permission::setup_routes())

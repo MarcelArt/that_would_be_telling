@@ -4,6 +4,9 @@ import { Separator } from '@/components/ui/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Outlet, createRootRoute, useLocation } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 export const Route = createRootRoute({
 	component: () => {
@@ -12,7 +15,7 @@ export const Route = createRootRoute({
 		const shouldHideSidebar = hideSidebarRoutes.includes(location.pathname);
 
 		return (
-			<>
+			<QueryClientProvider client={queryClient}>
 				<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
 					{!shouldHideSidebar ? (
 						<SidebarProvider>
@@ -52,7 +55,7 @@ export const Route = createRootRoute({
 				</ThemeProvider>
 
 				<TanStackRouterDevtools />
-			</>
+			</QueryClientProvider>
 		);
 	},
 });
